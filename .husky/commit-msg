@@ -18,19 +18,20 @@ echo -e "\n${amarilloColor}[commit-msg]${finColor}"
 first="$(head -n1 "$MSG_FILE")"
 
 if printf '%s' "$first" | grep -E "$PATTERN" >/dev/null; then
-    echo -e "${verdeColor}[✓]${finColor} ${grisColor}El mensaje de commit cumple el formato.${finColor}"
+    echo -e "\n${verdeColor}[✓]${finColor} ${grisColor}El mensaje de commit cumple el formato.${finColor}"
     # Validar longitud de la descripcion
     longitud=$(printf '%s' "$first" | wc -m | tr -d ' ')
-    if [ "$longitud" -le 72 ]; then
-        echo -e "${verdeColor}[✓]${finColor} ${grisColor}La descripción tiene una longitud válida (${longitud}/72).${finColor}"
+    if [ "$longitud" -le 100 ]; then
+        echo -e "${verdeColor}[✓]${finColor} ${grisColor}La descripción tiene una longitud válida (${longitud}/100).${finColor}"
     else
-        echo -e "${rojoColor}[✗]${finColor} ${grisColor}La descripción excede los 100 caracteres (${longitud}/72).${finColor}"
+        echo -e "${rojoColor}[✗]${finColor} ${grisColor}La descripción excede los 100 caracteres (${longitud}/100).${finColor}"
         exit 1
     fi
 else
-    echo -e "${rojoColor}[✗]${finColor} ${grisColor}El mensaje de commit no cumple el formato.${finColor}"
+    echo -e "\n${rojoColor}[✗]${finColor} ${grisColor}El mensaje de commit no cumple el formato.${finColor}"
     echo -e "\t${grisColor}Tu mensaje: '$first'${finColor}"
     echo -e "\t${grisColor}Formato válido: tipo(scope?): descripción\t${grisColor}"
     echo -e "\t${grisColor}Ejemplo: feat: añadir validación de entrada\t${grisColor}"
+    echo -e ""
     exit 1
 fi
