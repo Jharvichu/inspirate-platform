@@ -1,0 +1,42 @@
+#!/usr/bin/env sh
+set -euo pipefail
+
+verdeColor="\e[0;32m\033[1m"
+finColor="\033[0m\e[0m"
+rojoColor="\e[0;31m\033[1m"
+azulColor="\e[0;34m\033[1m"
+amarilloColor="\e[0;33m\033[1m"
+moradoColor="\e[0;35m\033[1m"
+turquesaColor="\e[0;36m\033[1m"
+grisColor="\e[0;37m\033[1m"
+
+echo -e "\n${amarilloColor}[pre-commit]${finColor}"
+
+echo -e "\n${turquesaColor}1. Validando estilos y linting${finColor}"
+
+if npm run lint:staged; then 
+    echo -e "${verdeColor}[✓]${finColor} ${grisColor}Estilos y linting correctos.${finColor}"
+else
+    echo -e "${rojoColor}[✗]${finColor} ${grisColor}Error en estilos o linting. Commit cancelado.${finColor}"
+    exit 1
+fi
+
+echo -e "\n${turquesaColor}2. Verificando tipos de TypeScript${finColor}"
+
+if npm run type:check; then 
+    echo -e "${verdeColor}[✓]${finColor} ${grisColor}Tipos sin errores.${finColor}"
+else
+    echo -e "${rojoColor}[✗]${finColor} ${grisColor}Errores de TypeScript encontrados. Commit cancelado.${finColor}"
+    exit 1
+fi
+
+echo -e "\n${turquesaColor}3. Escaneo de Seguridad${finColor}"
+
+if npm run security:check; then 
+    echo -e "${verdeColor}[✓]${finColor} ${grisColor}No se detectaron vulnerabilidades ni credenciales expuestas.${finColor}"
+else
+    echo -e "${rojoColor}[✗]${finColor} ${grisColor}Se detectaron secretos/credenciales en el código. Commit cancelado.${finColor}"
+    exit 1
+fi
+
+echo -e "\n${verdeColor}Todas las verificaciones pasaron correctamente. Commit permitido.${finColor}"

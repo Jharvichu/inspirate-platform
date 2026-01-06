@@ -1,0 +1,36 @@
+#!/usr/bin/env sh
+set -euo pipefail
+
+verdeColor="\e[0;32m\033[1m"
+finColor="\033[0m\e[0m"
+rojoColor="\e[0;31m\033[1m"
+azulColor="\e[0;34m\033[1m"
+amarilloColor="\e[0;33m\033[1m"
+moradoColor="\e[0;35m\033[1m"
+turquesaColor="\e[0;36m\033[1m"
+grisColor="\e[0;37m\033[1m"
+
+MSG_FILE=$1
+PATTERN='^(feat|fix|docs|style|refactor|perf|test|chore|security|build|ci|revert)(\([a-z0-9\-]+\))?:\s'
+
+echo -e "\n${amarilloColor}[commit-msg]${finColor}"
+
+first="$(head -n1 "$MSG_FILE")"
+
+if printf '%s' "$first" | grep -E "$PATTERN" >/dev/null; then
+    echo -e "${verdeColor}[✓]${finColor} ${grisColor}El mensaje de commit cumple el formato.${finColor}"
+    # Validar longitud de la descripcion
+    longitud=$(printf '%s' "$first" | wc -m | tr -d ' ')
+    if [ "$longitud" -le 72 ]; then
+        echo -e "${verdeColor}[✓]${finColor} ${grisColor}La descripción tiene una longitud válida (${longitud}/72).${finColor}"
+    else
+        echo -e "${rojoColor}[✗]${finColor} ${grisColor}La descripción excede los 100 caracteres (${longitud}/72).${finColor}"
+        exit 1
+    fi
+else
+    echo -e "${rojoColor}[✗]${finColor} ${grisColor}El mensaje de commit no cumple el formato.${finColor}"
+    echo -e "\t${grisColor}Tu mensaje: '$first'${finColor}"
+    echo -e "\t${grisColor}Formato válido: tipo(scope?): descripción\t${grisColor}"
+    echo -e "\t${grisColor}Ejemplo: feat: añadir validación de entrada\t${grisColor}"
+    exit 1
+fi
