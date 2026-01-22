@@ -1,6 +1,4 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# dependencies
+# DEPENDENCIES & NODE
 /node_modules
 /.pnp
 .pnp.*
@@ -10,32 +8,61 @@
 !.yarn/releases
 !.yarn/versions
 
-# testing
-/coverage
-
-# next.js
+# NEXT.JS & BUILD
 /.next/
 /out/
-
-# production
+/dist
 /build
 
-# misc
-.DS_Store
-*.pem
+# SUPABASE
+supabase/.temp/
+supabase/.branches/
+supabase/functions/**/.env
 
-# debug
+# ENVIRONMENT & SECURITY
+.env
+.env.*
+
+# EXCEPCIÓN:
+!.env.example
+!.env.local.example
+
+# Bloquea llaves privadas y certificados
+*.pem
+*.key
+*.cert
+*.crt
+
+# TESTING
+/coverage
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+
+# IDEs & OS FILES
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# DEBUG & LOGS
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
-# env files (can opt-in for committing if needed)
-.env*
-
-# vercel
+# VERCEL
 .vercel
 
-# typescript
+# TYPESCRIPT
 *.tsbuildinfo
 next-env.d.ts
+
+# TERRAFORM (Infraestructura)
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfvars
